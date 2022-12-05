@@ -1,9 +1,19 @@
 import {Text, View, Image, StyleSheet, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import {useNavigation} from '@react-navigation/native';
+
+import dayjs from 'dayjs';
+dayjs.extend(relativeTime);
 
 const ChatListItem = ({chat}) => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <Pressable
+      onPress={() =>
+        navigation.navigate('Chat', {id: chat.id, name: chat.user.name})
+      }
+      style={styles.container}>
       <Image
         style={{
           width: 60,
@@ -21,13 +31,15 @@ const ChatListItem = ({chat}) => {
             numberOfLines={1}>
             {chat.user.name}
           </Text>
-          <Text style={{color: 'gray'}}>{chat.lastMessage.createdAt}</Text>
+          <Text style={{color: 'gray'}}>
+            {dayjs(chat.lastMessage.createdAt).fromNow(true)}
+          </Text>
         </View>
         <Text style={{color: 'gray'}} numberOfLines={2}>
           {chat.lastMessage.text}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

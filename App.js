@@ -16,18 +16,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-
-import ChatListItem from './src/components/ChatListItem';
-import ChatsScreen from './src/screens/ChatsScreen';
-
-const chat = {
-  id: '1',
-  user: {image: 'http://img.youtube.com/vi/mxXJSVW4tRY/0.jpg', name: 'Lukas'},
-  lastMessage: {
-    text: 'goodbye',
-    createdAt: '08:30',
-  },
-};
+import Navigator from './src/navigation/index';
 
 const App = () => {
   return (
@@ -36,11 +25,8 @@ const App = () => {
         backgroundColor: 'whitesmoke',
         justifyContent: 'center',
         flex: 1,
-        paddingVertical: 40,
       }}>
-      {/* <ChatListItem chat={chat} />
-      <ChatListItem chat={chat} /> */}
-      <ChatsScreen />
+      <Navigator />
       <StatusBar style="auto" />
     </View>
   );
