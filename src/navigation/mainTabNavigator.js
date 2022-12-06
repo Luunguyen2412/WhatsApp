@@ -25,7 +25,24 @@ const MainTabNavigator = () => {
       />
       <Tab.Screen name="Calls" component={NotImplementedScreen} />
       <Tab.Screen name="Camera" component={NotImplementedScreen} />
-      <Tab.Screen name="Chats" component={ChatsScreen} />
+      <Tab.Screen
+        name="Chats"
+        component={ChatsScreen}
+        options={({navigation}) => ({
+          // tabBarIcon: ({color, size}) => (
+          //   <Ionicons name="ios-chatbubbles-sharp" size={size} color={color} />
+          // ),
+          headerRight: () => (
+            <FontAwesome
+              style={{paddingRight: 20}}
+              onPress={() => navigation.navigate('Contacts')}
+              size={30}
+              name="home"
+              color="black"
+            />
+          ),
+        })}
+      />
       <Tab.Screen name="Settings" component={NotImplementedScreen} />
     </Tab.Navigator>
   );
