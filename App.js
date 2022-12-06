@@ -17,6 +17,11 @@ import {
   View,
 } from 'react-native';
 import Navigator from './src/navigation/index';
+import {Amplify} from 'aws-amplify';
+import {withAuthenticator} from 'aws-amplify-react-native';
+import awsconfig from './src/aws-exports';
+
+Amplify.configure({...awsconfig, Analytics: {disabled: true}});
 
 const App = () => {
   return (
@@ -34,4 +39,4 @@ const App = () => {
 
 const styles = StyleSheet.create({});
 
-export default App;
+export default withAuthenticator(App);

@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ChatsScreen from '../screens/ChatsScreen';
 import NotImplementedScreen from '../screens/NotImplementedScreen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import SettingScreen from '../screens/SettingScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +44,7 @@ const MainTabNavigator = () => {
           ),
         })}
       />
-      <Tab.Screen name="Settings" component={NotImplementedScreen} />
+      <Tab.Screen name="Settings" component={SettingScreen} />
     </Tab.Navigator>
   );
 };
