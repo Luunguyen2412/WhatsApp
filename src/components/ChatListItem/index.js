@@ -4,14 +4,30 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import {useNavigation} from '@react-navigation/native';
 
 import dayjs from 'dayjs';
+import {Auth} from 'aws-amplify';
+
 dayjs.extend(relativeTime);
 
 const ChatListItem = ({chat}) => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const authUser = await Auth.currentAuthenticatedUser();
+
+      //find user that not us (author user)
+      const userItem = chat.users.items.find(
+        item => item.user.id !== authUser.attributes.sub,
+      );
+      setUser(userItem?.user);
+    };
+    fetchUser();
+  });
+
   const navigation = useNavigation();
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate('Chat', {id: chat.id, name: chat.user.name})
+        navigation.navigate('Chat', {id: chat.id, name: user?.name})
       }
       style={styles.container}>
       <Image
@@ -22,21 +38,21 @@ const ChatListItem = ({chat}) => {
           borderRadius: 30,
           marginRight: 10,
         }}
-        source={{uri: chat.user.image}}
+        source={{uri: user?.image}}
       />
       <View style={styles.content}>
         <View style={styles.row}>
           <Text
             style={{color: 'black', flex: 1, fontWeight: 'bold'}}
             numberOfLines={1}>
-            {chat.user.name}
+            {user?.name}
           </Text>
           <Text style={{color: 'gray'}}>
-            {dayjs(chat.lastMessage.createdAt).fromNow(true)}
+            {dayjs(chat.lastMessage?.createdAt).fromNow(true)}
           </Text>
         </View>
         <Text style={{color: 'gray'}} numberOfLines={2}>
-          {chat.lastMessage.text}
+          {chat.lastMessage?.text}
         </Text>
       </View>
     </Pressable>

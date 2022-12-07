@@ -1,15 +1,70 @@
-import {Text, View, Image, StyleSheet, Pressable} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {useNavigation} from '@react-navigation/native';
+import {API, graphqlOperation, Auth} from 'aws-amplify';
+import {createChatRoom, createUserChatRoom} from '../../graphql/mutations';
+import {getCommonChatRoomWithUser} from '../../services/chatRoomService';
 
 import dayjs from 'dayjs';
 dayjs.extend(relativeTime);
 
 const ContactListItem = ({user}) => {
   const navigation = useNavigation();
+
+  const onPress = async () => {
+    console.log('press');
+
+    //check if already have a Chatroom with user
+    const existingChatroom = await getCommonChatRoomWithUser(user.id);
+    if (existingChatroom) {
+      navigation.navigate('Chat', {id: existingChatroom.id});
+      return;
+    }
+
+    // create a new chatRoom
+    const newChatRoomData = await API.graphql(
+      graphqlOperation(createChatRoom, {input: {}}),
+    );
+    console.log('newChatRoom', newChatRoomData);
+
+    if (!newChatRoomData.data?.createChatRoom) {
+      console.log('Error creating the chat');
+    }
+
+    const newChatRoom = newChatRoomData.data?.createChatRoom;
+
+    // add the user to the chatRoom
+    await API.graphql(
+      graphqlOperation(createUserChatRoom, {
+        input: {chatRoomId: newChatRoom.id, userId: user.id},
+      }),
+    );
+
+    // add the Auth User to the chatRoom
+    const authUser = await Auth.currentAuthenticatedUser();
+    await API.graphql(
+      graphqlOperation(createUserChatRoom, {
+        input: {
+          chatRoomId: newChatRoom.id,
+          userId: authUser.attributes.sub,
+        },
+      }),
+    );
+
+    // navigate to the new chatRoom screen
+    navigation.navigate('Chat', {id: newChatRoom.id});
+  };
+
   return (
-    <Pressable onPress={() => {}} style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image
         style={{
           width: 60,
@@ -25,7 +80,7 @@ const ContactListItem = ({user}) => {
         numberOfLines={1}>
         {user.name}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

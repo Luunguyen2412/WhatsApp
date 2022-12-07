@@ -50,7 +50,7 @@ const App = () => {
         status: 'hey, i am using WhatsApp',
       };
 
-      console.log('newUser', newUser);
+      // console.log('newUser', newUser);
 
       await API.graphql(graphqlOperation(createUser, {input: newUser}));
     };
