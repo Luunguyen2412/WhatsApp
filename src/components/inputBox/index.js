@@ -10,11 +10,37 @@ import {
 import React, {useEffect, useState} from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {API, graphqlOperation, Auth} from 'aws-amplify';
+import {createMessage, updateChatRoom} from '../../graphql/mutations';
 
-const InputBox = ({}) => {
-  const [newMessage, setNewMessage] = useState('');
+const InputBox = ({chatroom}) => {
+  const [text, setText] = useState('');
 
-  const onSend = () => {};
+  const onSend = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+
+    const newMessage = {
+      chatroomID: chatroom.id,
+      text,
+      userID: authUser.attributes.sub,
+    };
+    const newMessageData = await API.graphql(
+      graphqlOperation(createMessage, {input: newMessage}),
+    );
+
+    setText('');
+
+    //set the new message
+    await API.graphql(
+      graphqlOperation(updateChatRoom, {
+        input: {
+          _version: chatroom._version,
+          chatRoomLastMessageId: newMessageData.data.createMessage.id,
+          id: chatroom.id,
+        },
+      }),
+    );
+  };
 
   return (
     <SafeAreaView edges={['bottom']} style={styles.container}>
@@ -34,9 +60,10 @@ const InputBox = ({}) => {
         style={styles.input}
         placeholder="Type your message"
         placeholderTextColor="gray"
-        // onChange={newMessage}
+        onChangeText={setText}
+        value={text}
       />
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onSend}>
         <Text style={{color: 'black', overflow: 'hidden', paddingRight: 5}}>
           send
         </Text>

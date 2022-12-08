@@ -2,20 +2,31 @@ import {Text, View, Image, StyleSheet, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
+import {API, graphqlOperation, Auth} from 'aws-amplify';
 dayjs.extend(relativeTime);
 
 const Message = ({message}) => {
-  const isMyMessage = () => {
-    return message.user.id === 'u1';
-  };
+  const [isMe, setIsMe] = useState(false);
+
+  useEffect(() => {
+    const isMyMessage = async () => {
+      const authUser = await Auth.currentAuthenticatedUser();
+
+      setIsMe(message.userID === authUser.attributes.sub);
+    };
+
+    isMyMessage();
+  }, []);
+
+  // console.log(message);
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
-          alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',
+          backgroundColor: isMe ? '#DCF8C5' : 'white',
+          alignSelf: isMe ? 'flex-end' : 'flex-start',
         },
       ]}>
       <Text style={{color: 'black'}}>{message.text}</Text>
