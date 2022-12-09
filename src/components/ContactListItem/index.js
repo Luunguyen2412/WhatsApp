@@ -25,7 +25,7 @@ const ContactListItem = ({user}) => {
     //check if already have a Chatroom with user
     const existingChatroom = await getCommonChatRoomWithUser(user.id);
     if (existingChatroom) {
-      navigation.navigate('Chat', {id: existingChatroom.id});
+      navigation.navigate('Chat', {id: existingChatroom.chatRoom.id});
       return;
     }
 
@@ -44,7 +44,7 @@ const ContactListItem = ({user}) => {
     // add the user to the chatRoom
     await API.graphql(
       graphqlOperation(createUserChatRoom, {
-        input: {chatRoomId: newChatRoom.id, userId: user.id},
+        input: {chatRoomID: newChatRoom.id, userID: user.id},
       }),
     );
 
@@ -53,8 +53,8 @@ const ContactListItem = ({user}) => {
     await API.graphql(
       graphqlOperation(createUserChatRoom, {
         input: {
-          chatRoomId: newChatRoom.id,
-          userId: authUser.attributes.sub,
+          chatRoomID: newChatRoom.id,
+          userID: authUser.attributes.sub,
         },
       }),
     );
@@ -75,11 +75,16 @@ const ContactListItem = ({user}) => {
         }}
         source={{uri: user.image}}
       />
-      <Text
-        style={{color: 'black', flex: 1, fontWeight: 'bold'}}
-        numberOfLines={1}>
-        {user.name}
-      </Text>
+      <View style={{flex: 1, marginRight: 10, marginVertical: 10}}>
+        <Text
+          style={{color: 'black', flex: 1, fontWeight: 'bold'}}
+          numberOfLines={1}>
+          {user.name}
+        </Text>
+        <Text style={{color: 'gray', flex: 1}} numberOfLines={1}>
+          {user.status}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
