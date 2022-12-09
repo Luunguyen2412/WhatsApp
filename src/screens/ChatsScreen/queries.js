@@ -8,6 +8,7 @@ export const listChatRooms =
           items {
             chatRoom {
               id
+              updatedAt
               users {
                 items {
                   user {

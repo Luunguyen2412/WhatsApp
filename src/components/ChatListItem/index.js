@@ -47,9 +47,11 @@ const ChatListItem = ({chat}) => {
             numberOfLines={1}>
             {user?.name}
           </Text>
-          <Text style={{color: 'gray'}}>
-            {dayjs(chat.LastMessage?.createdAt).fromNow(true)}
-          </Text>
+          {chat.LastMessage && (
+            <Text style={{color: 'gray'}}>
+              {dayjs(chat.LastMessage?.createdAt).fromNow(true)}
+            </Text>
+          )}
         </View>
         <Text style={{color: 'gray'}} numberOfLines={2}>
           {chat.LastMessage?.text}

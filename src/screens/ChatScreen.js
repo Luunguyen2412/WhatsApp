@@ -31,12 +31,9 @@ const ChatScreen = ({route}) => {
     API.graphql(graphqlOperation(getChatRoom, {id: chatroomID})).then(
       result => {
         setChatRoom(result.data?.getChatRoom);
-
-        // //delete this after query messages directly
-        // setMessages(result.data?.getChatRoom?.Messages?.items);
       },
     );
-  }, []);
+  }, [chatroomID]);
 
   // fetch Messages
   useEffect(() => {
@@ -48,7 +45,7 @@ const ChatScreen = ({route}) => {
     ).then(result => {
       setMessages(result.data?.listMessagesByChatRoom?.items);
     });
-  }, []);
+  }, [chatroomID]);
 
   useEffect(() => {
     navigation.setOptions({title: route.params.name});
