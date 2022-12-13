@@ -9,59 +9,61 @@ import {
 import React, {useEffect, useState} from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {useNavigation} from '@react-navigation/native';
-import {API, graphqlOperation, Auth} from 'aws-amplify';
-import {createChatRoom, createUserChatRoom} from '../../graphql/mutations';
-import {getCommonChatRoomWithUser} from '../../services/chatRoomService';
 
 import dayjs from 'dayjs';
 dayjs.extend(relativeTime);
 
-const ContactListItem = ({user}) => {
+const ContactListItem = ({
+  user,
+  onPress = () => {},
+  selectable = false,
+  isSelected = false,
+}) => {
   const navigation = useNavigation();
 
-  const onPress = async () => {
-    console.log('press');
+  // const onPress = async () => {
+  //   console.log('press');
 
-    //check if already have a Chatroom with user
-    const existingChatroom = await getCommonChatRoomWithUser(user.id);
-    if (existingChatroom) {
-      navigation.navigate('Chat', {id: existingChatroom.chatRoom.id});
-      return;
-    }
+  //   //check if already have a Chatroom with user
+  //   const existingChatroom = await getCommonChatRoomWithUser(user.id);
+  //   if (existingChatroom) {
+  //     navigation.navigate('Chat', {id: existingChatroom.chatRoom.id});
+  //     return;
+  //   }
 
-    // create a new chatRoom
-    const newChatRoomData = await API.graphql(
-      graphqlOperation(createChatRoom, {input: {}}),
-    );
-    console.log('newChatRoom', newChatRoomData);
+  //   // create a new chatRoom
+  //   const newChatRoomData = await API.graphql(
+  //     graphqlOperation(createChatRoom, {input: {}}),
+  //   );
+  //   console.log('newChatRoom', newChatRoomData);
 
-    if (!newChatRoomData.data?.createChatRoom) {
-      console.log('Error creating the chat');
-    }
+  //   if (!newChatRoomData.data?.createChatRoom) {
+  //     console.log('Error creating the chat');
+  //   }
 
-    const newChatRoom = newChatRoomData.data?.createChatRoom;
+  //   const newChatRoom = newChatRoomData.data?.createChatRoom;
 
-    // add the user to the chatRoom
-    await API.graphql(
-      graphqlOperation(createUserChatRoom, {
-        input: {chatRoomID: newChatRoom.id, userID: user.id},
-      }),
-    );
+  //   // add the user to the chatRoom
+  //   await API.graphql(
+  //     graphqlOperation(createUserChatRoom, {
+  //       input: {chatRoomID: newChatRoom.id, userID: user.id},
+  //     }),
+  //   );
 
-    // add the Auth User to the chatRoom
-    const authUser = await Auth.currentAuthenticatedUser();
-    await API.graphql(
-      graphqlOperation(createUserChatRoom, {
-        input: {
-          chatRoomID: newChatRoom.id,
-          userID: authUser.attributes.sub,
-        },
-      }),
-    );
+  //   // add the Auth User to the chatRoom
+  //   const authUser = await Auth.currentAuthenticatedUser();
+  //   await API.graphql(
+  //     graphqlOperation(createUserChatRoom, {
+  //       input: {
+  //         chatRoomID: newChatRoom.id,
+  //         userID: authUser.attributes.sub,
+  //       },
+  //     }),
+  //   );
 
-    // navigate to the new chatRoom screen
-    navigation.navigate('Chat', {id: newChatRoom.id});
-  };
+  //   // navigate to the new chatRoom screen
+  //   navigation.navigate('Chat', {id: newChatRoom.id});
+  // };
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -85,6 +87,26 @@ const ContactListItem = ({user}) => {
           {user.status}
         </Text>
       </View>
+      {selectable &&
+        (isSelected ? (
+          <View
+            style={{
+              backgroundColor: 'royalblue',
+              height: 24,
+              width: 24,
+              borderRadius: 20,
+            }}
+          />
+        ) : (
+          <View
+            style={{
+              backgroundColor: 'gray',
+              height: 24,
+              width: 24,
+              borderRadius: 20,
+            }}
+          />
+        ))}
     </TouchableOpacity>
   );
 };
