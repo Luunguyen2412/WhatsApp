@@ -6,9 +6,12 @@ export const listChatRooms =
         id
         ChatRooms {
           items {
+            _deleted
             chatRoom {
               id
               updatedAt
+              name
+              image
               users {
                 items {
                   user {

@@ -22,6 +22,9 @@ import {withAuthenticator} from 'aws-amplify-react-native';
 import awsconfig from './src/aws-exports';
 import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
+import {LogBox} from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 Amplify.configure({...awsconfig, Analytics: {disabled: true}});
 

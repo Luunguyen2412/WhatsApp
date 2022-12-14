@@ -8,6 +8,8 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   ActivityIndicator,
+  TouchableOpacity,
+  Button,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ChatListItem from '../components/ChatListItem';
@@ -76,14 +78,24 @@ const ChatScreen = ({route}) => {
   }, [chatroomID]);
 
   useEffect(() => {
-    navigation.setOptions({title: route.params.name});
-  }, [route.params.name]);
+    navigation.setOptions({
+      title: route.params.name,
+      headerRight: () => (
+        <Button
+          title="Info"
+          onPress={() => {
+            navigation.navigate('Group Info', {id: chatroomID});
+          }}
+        />
+      ),
+    });
+  }, [route.params.name, chatroomID]);
 
   if (!chatRoom) {
     return <ActivityIndicator />;
   }
 
-  console.log(JSON.stringify(chatRoom));
+  // console.log(JSON.stringify(chatRoom));
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -109,51 +121,14 @@ const styles = StyleSheet.create({
 export default ChatScreen;
 
 const a = {
-  id: '79796336-f99e-4aad-bb94-e55c28f46a6d',
-  name: null,
-  image: null,
-  Messages: {items: [], nextToken: null, startedAt: null},
-  users: {
-    items: [
-      {
-        id: 'f93ac289-cbfb-4c45-ae31-e380d5c9b397',
-        chatRoomId: '79796336-f99e-4aad-bb94-e55c28f46a6d',
-        userId: 'cc8323ad-3494-46eb-a723-d7877a737509',
-        createdAt: '2022-12-13T07:03:49.312Z',
-        updatedAt: '2022-12-13T07:03:49.312Z',
-        _version: 1,
-        _deleted: null,
-        _lastChangedAt: 1670915029314,
-      },
-      {
-        id: '647329e9-dfeb-4f2e-8f12-34b31aa01a63',
-        chatRoomId: '79796336-f99e-4aad-bb94-e55c28f46a6d',
-        userId: '1c90e9de-9db4-426e-937f-907c1fab9311',
-        createdAt: '2022-12-13T07:03:49.289Z',
-        updatedAt: '2022-12-13T07:03:49.289Z',
-        _version: 1,
-        _deleted: null,
-        _lastChangedAt: 1670915029291,
-      },
-      {
-        id: '469e80fe-262e-4339-8391-e1870155b8af',
-        chatRoomId: '79796336-f99e-4aad-bb94-e55c28f46a6d',
-        userId: '0e7abce6-a3bc-4b28-b3e8-787b070a9cdd',
-        createdAt: '2022-12-13T07:03:49.274Z',
-        updatedAt: '2022-12-13T07:03:49.274Z',
-        _version: 1,
-        _deleted: null,
-        _lastChangedAt: 1670915029277,
-      },
-    ],
-    nextToken: null,
-    startedAt: null,
+  LastMessage: {
+    createdAt: '2022-12-14T04:06:57.156Z',
+    id: '05206c09-b4a6-4422-bb99-dde0eaecf965',
+    text: 'Hello ae',
   },
-  LastMessage: null,
-  createdAt: '2022-12-13T07:03:48.655Z',
-  updatedAt: '2022-12-13T07:03:48.655Z',
-  _version: 1,
-  _deleted: null,
-  _lastChangedAt: 1670915028679,
-  chatRoomLastMessageId: null,
+  id: 'f840a0fe-44dd-49ae-a729-2474aa0ab667',
+  image: null,
+  name: null,
+  updatedAt: '2022-12-14T04:06:58.523Z',
+  users: {items: [[Object], [Object], [Object], [Object], [Object]]},
 };

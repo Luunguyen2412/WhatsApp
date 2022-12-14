@@ -1,8 +1,8 @@
 import {
   View,
   Text,
-  FlatList,
   TextInput,
+  FlatList,
   StyleSheet,
   Button,
 } from 'react-native';
@@ -13,7 +13,7 @@ import {listUsers} from '../graphql/queries';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {createChatRoom, createUserChatRoom} from '../graphql/mutations';
 
-const NewGroupScreen = () => {
+const AddContactsScreen = () => {
   const navigation = useNavigation();
   const [users, setUsers] = useState([]);
   const [name, setName] = useState('');
@@ -30,57 +30,14 @@ const NewGroupScreen = () => {
     navigation.setOptions({
       headerRight: () => (
         <Button
-          title="Create"
+          title="Add"
           disabled={!name || selectedUserIds.length < 1}
-          onPress={onCreateGroupPress}
+          // onPress={onCreateGroupPress}
         />
       ),
     });
   }, [name, selectedUserIds]);
 
-  const onCreateGroupPress = async () => {
-    // create a new chatRoom
-    const newChatRoomData = await API.graphql(
-      graphqlOperation(createChatRoom, {input: {name}}),
-    );
-    console.log('newChatRoomData', newChatRoomData);
-
-    if (!newChatRoomData.data?.createChatRoom) {
-      console.log('Error creating the chat');
-    }
-
-    const newChatRoom = newChatRoomData.data?.createChatRoom;
-
-    // add the selected user to the chatRoom
-    await Promise.all(
-      selectedUserIds.map(userID =>
-        API.graphql(
-          graphqlOperation(createUserChatRoom, {
-            input: {chatRoomId: newChatRoom.id, userId: userID},
-          }),
-        ),
-      ),
-    );
-
-    // add the Auth User to the chatRoom
-    const authUser = await Auth.currentAuthenticatedUser();
-    await API.graphql(
-      graphqlOperation(createUserChatRoom, {
-        input: {
-          chatRoomId: newChatRoom.id,
-          userId: authUser.attributes.sub,
-        },
-      }),
-    );
-
-    setSelectedUserIds([]);
-    setName('');
-
-    // navigate to the new chatRoom screen
-    navigation.navigate('Chat', {id: newChatRoom.id});
-  };
-
-  // select user to group chat -- change color status when you press
   const onContactPress = id => {
     setSelectedUserIds(userIds => {
       if (userIds.includes(id)) {
@@ -116,7 +73,6 @@ const NewGroupScreen = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -132,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewGroupScreen;
+export default AddContactsScreen;

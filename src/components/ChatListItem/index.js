@@ -54,7 +54,10 @@ const ChatListItem = ({chat}) => {
   return (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate('Chat', {id: chatRoom.id, name: user?.name})
+        navigation.navigate('Chat', {
+          id: chatRoom.id,
+          name: chatRoom.name || user?.name,
+        })
       }
       style={styles.container}>
       <Image
@@ -72,7 +75,7 @@ const ChatListItem = ({chat}) => {
           <Text
             style={{color: 'black', flex: 1, fontWeight: 'bold'}}
             numberOfLines={1}>
-            {user?.name}
+            {chatRoom.name || user?.name}
           </Text>
           {chat.LastMessage && (
             <Text style={{color: 'gray'}}>

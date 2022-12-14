@@ -10,7 +10,7 @@ export const getCommonChatRoomWithUser = async userID => {
 
   const chatRooms = response.data?.getUser?.ChatRooms?.items || [];
 
-  console.log('myChatRoom', chatRooms);
+  // console.log('myChatRoom', chatRooms);
 
   const chatRoom = chatRooms.find(chatRoomItem => {
     return (
