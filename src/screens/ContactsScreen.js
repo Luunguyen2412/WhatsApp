@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {createChatRoom, createUserChatRoom} from '../graphql/mutations';
 import {getCommonChatRoomWithUser} from '../services/chatRoomService';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 
 const ContactsScreen = ({}) => {
   const navigation = useNavigation();
@@ -99,8 +100,11 @@ const ContactsScreen = ({}) => {
               padding: 7,
               borderRadius: 20,
               overflow: 'hidden',
-            }}
-          />
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <FontAwesome size={20} name="user" color="royalblue" />
+          </View>
           <Text style={{color: 'royalblue', fontSize: 16}}>New Group</Text>
         </TouchableOpacity>
       )}

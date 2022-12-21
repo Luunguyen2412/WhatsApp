@@ -15,6 +15,8 @@ import {createMessage, updateChatRoom} from '../../graphql/mutations';
 
 const InputBox = ({chatroom}) => {
   const [text, setText] = useState('');
+  const [files, setFiles] = useState([]);
+  const [image, setImage] = useState(null);
 
   const onSend = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
@@ -42,20 +44,14 @@ const InputBox = ({chatroom}) => {
     );
   };
 
+  const pickImage = async () => {};
+
   return (
     <SafeAreaView edges={['bottom']} style={styles.container}>
-      <TouchableOpacity>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 30,
-            paddingLeft: 10,
-            overflow: 'hidden',
-          }}>
-          +
-        </Text>
+      <TouchableOpacity onPress={pickImage}>
+        <FontAwesome size={24} name="images" color="black" />
       </TouchableOpacity>
-      {/* <FontAwesome size={24} name="home" color="black" /> */}
+
       <TextInput
         style={styles.input}
         placeholder="Type your message"
@@ -63,11 +59,24 @@ const InputBox = ({chatroom}) => {
         onChangeText={setText}
         value={text}
       />
-      <TouchableOpacity onPress={onSend}>
-        <Text style={{color: 'black', overflow: 'hidden', paddingRight: 5}}>
-          send
-        </Text>
-      </TouchableOpacity>
+      {text.length > 0 ? (
+        <View
+          style={{padding: 8, borderRadius: 60, backgroundColor: 'royalblue'}}>
+          <FontAwesome
+            // onPress={onSend}
+            onPress={onSend}
+            size={20}
+            name="paper-plane"
+            color="white"
+          />
+        </View>
+      ) : (
+        <TouchableOpacity onPress={() => {}}>
+          <Text style={{color: 'black', overflow: 'hidden', paddingRight: 5}}>
+            send
+          </Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

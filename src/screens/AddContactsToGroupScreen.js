@@ -19,24 +19,54 @@ const AddContactsScreen = () => {
   const [name, setName] = useState('');
   const [selectedUserIds, setSelectedUserIds] = useState([]);
 
+  const [search, setSearch] = useState('');
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
+
   // List user contact
   useEffect(() => {
     API.graphql(graphqlOperation(listUsers)).then(result => {
       setUsers(result.data?.listUsers?.items);
+      setFilteredDataSource(result.data?.listUsers?.items);
+      setMasterDataSource(result.data?.listUsers?.items);
     });
   });
+
+  // Search filter
+  const searchFilterFunction = text => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource.filter(function (item) {
+        const itemData = item.title
+          ? item.title.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Button
-          title="Add"
-          disabled={!name || selectedUserIds.length < 1}
+          title="Invite"
+          disabled={selectedUserIds.length < 1}
           // onPress={onCreateGroupPress}
         />
       ),
     });
-  }, [name, selectedUserIds]);
+  }, [selectedUserIds]);
 
   const onContactPress = id => {
     setSelectedUserIds(userIds => {
@@ -53,14 +83,27 @@ const AddContactsScreen = () => {
   return (
     <View style={{backgroundColor: 'white'}}>
       <TextInput
-        placeholder="Group name"
-        value={name}
-        onChangeText={setName}
+        placeholder="Search here"
+        value={search}
+        onChangeText={item => searchFilterFunction(item)}
         style={styles.input}
         placeholderTextColor="gray"
       />
-      <FlatList
+      {/* <FlatList
         data={users}
+        renderItem={({item}) => (
+          <ContactListItem
+            user={item}
+            selectable
+            onPress={() => onContactPress(item.id)}
+            isSelected={selectedUserIds.includes(item.id)}
+          />
+        )}
+      /> */}
+      <FlatList
+        data={filteredDataSource}
+        keyExtractor={(item, index) => index.toString()}
+        // ItemSeparatorComponent={ItemSeparatorView}
         renderItem={({item}) => (
           <ContactListItem
             user={item}

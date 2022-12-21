@@ -8,6 +8,7 @@ import ContactsScreen from '../screens/ContactsScreen';
 import NewGroupScreen from '../screens/NewGroupScreen';
 import GroupInfoScreen from '../screens/GroupInfoScreen';
 import AddContactsScreen from '../screens/AddContactsToGroupScreen';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createNativeStackNavigator();
 

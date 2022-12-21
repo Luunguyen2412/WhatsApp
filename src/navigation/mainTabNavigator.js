@@ -4,6 +4,8 @@ import ChatsScreen from '../screens/ChatsScreen/ChatsScreen';
 import NotImplementedScreen from '../screens/NotImplementedScreen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import SettingScreen from '../screens/SettingScreen';
+import {View} from 'react-native';
+// import {Ionicons, Entypo} from 'react-native-vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,33 +20,69 @@ const MainTabNavigator = () => {
       <Tab.Screen
         name="Status"
         component={NotImplementedScreen}
-        // options={{
-        //   tabBarIcon: ({color, size}) => (
-        //     <Ionicons name="logo-whatsapp" size={size} color={color} />
-        //   ),
-        // }}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <FontAwesome size={size} name="home" color={color} />
+          ),
+        }}
       />
-      <Tab.Screen name="Calls" component={NotImplementedScreen} />
-      <Tab.Screen name="Camera" component={NotImplementedScreen} />
+      <Tab.Screen
+        name="Calls"
+        component={NotImplementedScreen}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <FontAwesome size={size} name="phone" color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Camera"
+        component={NotImplementedScreen}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <FontAwesome size={size} name="camera" color={color} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="Chats"
         component={ChatsScreen}
         options={({navigation}) => ({
-          // tabBarIcon: ({color, size}) => (
-          //   <Ionicons name="ios-chatbubbles-sharp" size={size} color={color} />
-          // ),
+          tabBarIcon: ({color, size}) => (
+            <FontAwesome size={size} name="comments" color={color} />
+          ),
           headerRight: () => (
-            <FontAwesome
-              style={{paddingRight: 20}}
-              onPress={() => navigation.navigate('Contacts')}
-              size={30}
-              name="home"
-              color="black"
-            />
+            <View
+              style={{
+                height: 40,
+                width: 40,
+                marginRight: 15,
+                backgroundColor: 'gainsboro',
+                padding: 7,
+                borderRadius: 20,
+                overflow: 'hidden',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <FontAwesome
+                onPress={() => navigation.navigate('Contacts')}
+                size={20}
+                name="comment-medical"
+                color={'royalblue'}
+              />
+            </View>
           ),
         })}
       />
-      <Tab.Screen name="Settings" component={SettingScreen} />
+      <Tab.Screen
+        name="Settings"
+        component={SettingScreen}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <FontAwesome size={size} name="cog" color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };
