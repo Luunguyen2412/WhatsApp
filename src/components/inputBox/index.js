@@ -12,11 +12,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {createMessage, updateChatRoom} from '../../graphql/mutations';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const InputBox = ({chatroom}) => {
   const [text, setText] = useState('');
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState(null);
+
+  const [uri, setUri] = useState();
 
   const onSend = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
@@ -42,42 +45,71 @@ const InputBox = ({chatroom}) => {
         },
       }),
     );
+    console.log('message:', text);
   };
 
-  const pickImage = async () => {};
+  const pickImage = async () => {
+    try {
+      await ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      }).then(image => {
+        // setFiles(image);
+        setUri(image.path);
+        console.log(image.path);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <SafeAreaView edges={['bottom']} style={styles.container}>
-      <TouchableOpacity onPress={pickImage}>
-        <FontAwesome size={24} name="images" color="black" />
-      </TouchableOpacity>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Type your message"
-        placeholderTextColor="gray"
-        onChangeText={setText}
-        value={text}
-      />
-      {text.length > 0 ? (
-        <View
-          style={{padding: 8, borderRadius: 60, backgroundColor: 'royalblue'}}>
-          <FontAwesome
-            // onPress={onSend}
-            onPress={onSend}
-            size={20}
-            name="paper-plane"
-            color="white"
-          />
-        </View>
-      ) : (
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={{color: 'black', overflow: 'hidden', paddingRight: 5}}>
-            send
-          </Text>
-        </TouchableOpacity>
+    <>
+      {files.length > 0 && (
+        <FlatList
+          data={files}
+          renderItem={({item}) => {
+            <Image source={{uri: item.uri}} />;
+          }}
+        />
       )}
-    </SafeAreaView>
+      <SafeAreaView edges={['bottom']} style={styles.container}>
+        <TouchableOpacity onPress={pickImage}>
+          <FontAwesome size={24} name="images" color="black" />
+        </TouchableOpacity>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Type your message"
+          placeholderTextColor="gray"
+          onChangeText={setText}
+          value={text}
+        />
+        {text.length > 0 ? (
+          <View
+            style={{
+              padding: 8,
+              borderRadius: 60,
+              backgroundColor: 'royalblue',
+            }}>
+            <FontAwesome
+              // onPress={onSend}
+              onPress={onSend}
+              size={20}
+              name="paper-plane"
+              color="white"
+            />
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={{color: 'black', overflow: 'hidden', paddingRight: 5}}>
+              send
+            </Text>
+          </TouchableOpacity>
+        )}
+      </SafeAreaView>
+    </>
   );
 };
 

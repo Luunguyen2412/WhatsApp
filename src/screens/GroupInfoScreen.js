@@ -54,14 +54,14 @@ const GroupInfoScreen = ({}) => {
     return () => subscription.unsubscribe();
   }, [chatroomID]);
 
-  // // delete user
-  // const removeChatRoomUser = async chatRoomUser => {
-  //   await API.graphql(
-  //     graphqlOperation(deleteUserChatRoom, {
-  //       input: {_version: chatRoomUser._version, id: chatRoomUser.id},
-  //     }),
-  //   );
-  // };
+  // delete user
+  const removeChatRoomUser = async chatRoomUser => {
+    // await API.graphql(
+    //   graphqlOperation(deleteUserChatRoom, {
+    //     input: {_version: chatRoomUser._version, id: chatRoomUser.id},
+    //   }),
+    // );
+  };
 
   const onContactPress = chatRoomUser => {
     Alert.alert(

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -52,51 +53,90 @@ const ChatListItem = ({chat}) => {
 
   const navigation = useNavigation();
   return (
-    <TouchableOpacity
+    <TouchableHighlight
+      underlayColor={'#AAA'}
       onPress={() =>
         navigation.navigate('Chat', {
           id: chatRoom.id,
           name: chatRoom.name || user?.name,
         })
-      }
-      style={styles.container}>
-      <Image
-        style={{
-          width: 60,
-          height: 60,
-          backgroundColor: 'gray',
-          borderRadius: 30,
-          marginRight: 10,
-        }}
-        source={{uri: user?.image}}
-      />
-      <View style={styles.content}>
-        <View style={styles.row}>
-          <Text
-            style={{color: 'black', flex: 1, fontWeight: 'bold'}}
-            numberOfLines={1}>
-            {chatRoom.name || user?.name}
-          </Text>
-          {chat.LastMessage && (
-            <Text style={{color: 'gray'}}>
-              {dayjs(chatRoom.LastMessage?.createdAt).fromNow(true)}
+      }>
+      <View style={styles.container}>
+        <Image
+          style={{
+            width: 60,
+            height: 60,
+            backgroundColor: 'gray',
+            borderRadius: 30,
+            marginRight: 10,
+          }}
+          source={{uri: user?.image}}
+        />
+        <View style={styles.content}>
+          <View style={styles.row}>
+            <Text
+              style={{color: 'black', flex: 1, fontWeight: 'bold'}}
+              numberOfLines={1}>
+              {chatRoom.name || user?.name}
             </Text>
-          )}
+            {chat.LastMessage && (
+              <Text style={{color: 'gray'}}>
+                {dayjs(chatRoom.LastMessage?.createdAt).fromNow(true)}
+              </Text>
+            )}
+          </View>
+          <Text style={{color: 'gray'}} numberOfLines={2}>
+            {chatRoom.LastMessage?.text}
+          </Text>
         </View>
-        <Text style={{color: 'gray'}} numberOfLines={2}>
-          {chatRoom.LastMessage?.text}
-        </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
+    //   <TouchableOpacity
+    //   onPress={() =>
+    //     navigation.navigate('Chat', {
+    //       id: chatRoom.id,
+    //       name: chatRoom.name || user?.name,
+    //     })
+    //   }
+    //   style={styles.container}>
+    //   <Image
+    //     style={{
+    //       width: 60,
+    //       height: 60,
+    //       backgroundColor: 'gray',
+    //       borderRadius: 30,
+    //       marginRight: 10,
+    //     }}
+    //     source={{uri: user?.image}}
+    //   />
+    //   <View style={styles.content}>
+    //     <View style={styles.row}>
+    //       <Text
+    //         style={{color: 'black', flex: 1, fontWeight: 'bold'}}
+    //         numberOfLines={1}>
+    //         {chatRoom.name || user?.name}
+    //       </Text>
+    //       {chat.LastMessage && (
+    //         <Text style={{color: 'gray'}}>
+    //           {dayjs(chatRoom.LastMessage?.createdAt).fromNow(true)}
+    //         </Text>
+    //       )}
+    //     </View>
+    //     <Text style={{color: 'gray'}} numberOfLines={2}>
+    //       {chatRoom.LastMessage?.text}
+    //     </Text>
+    //   </View>
+    // </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginHorizontal: 10,
-    marginVertical: 5,
-    height: 70,
+    paddingHorizontal: 10,
+    // paddingVertical: 10,
+    height: 80,
+    backgroundColor: 'white',
   },
   content: {
     flex: 1,

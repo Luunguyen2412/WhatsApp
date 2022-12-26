@@ -27,8 +27,8 @@ const AddContactsScreen = () => {
   useEffect(() => {
     API.graphql(graphqlOperation(listUsers)).then(result => {
       setUsers(result.data?.listUsers?.items);
-      setFilteredDataSource(result.data?.listUsers?.items);
-      setMasterDataSource(result.data?.listUsers?.items);
+      // setFilteredDataSource(result.data?.listUsers?.items);
+      // setMasterDataSource(result.data?.listUsers?.items);
     });
   });
 
@@ -82,14 +82,14 @@ const AddContactsScreen = () => {
 
   return (
     <View style={{backgroundColor: 'white'}}>
-      <TextInput
+      {/* <TextInput
         placeholder="Search here"
         value={search}
         onChangeText={item => searchFilterFunction(item)}
         style={styles.input}
         placeholderTextColor="gray"
-      />
-      {/* <FlatList
+      /> */}
+      <FlatList
         data={users}
         renderItem={({item}) => (
           <ContactListItem
@@ -99,8 +99,8 @@ const AddContactsScreen = () => {
             isSelected={selectedUserIds.includes(item.id)}
           />
         )}
-      /> */}
-      <FlatList
+      />
+      {/* <FlatList
         data={filteredDataSource}
         keyExtractor={(item, index) => index.toString()}
         // ItemSeparatorComponent={ItemSeparatorView}
@@ -112,7 +112,7 @@ const AddContactsScreen = () => {
             isSelected={selectedUserIds.includes(item.id)}
           />
         )}
-      />
+      /> */}
     </View>
   );
 };
