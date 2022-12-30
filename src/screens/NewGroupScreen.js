@@ -24,7 +24,7 @@ const NewGroupScreen = () => {
     API.graphql(graphqlOperation(listUsers)).then(result => {
       setUsers(result.data?.listUsers?.items);
     });
-  });
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -103,6 +103,7 @@ const NewGroupScreen = () => {
         placeholderTextColor="gray"
       />
       <FlatList
+        style={{marginBottom: 60}}
         data={users}
         renderItem={({item}) => (
           <ContactListItem

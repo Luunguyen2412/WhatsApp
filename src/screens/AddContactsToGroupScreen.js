@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ContactListItem from '../components/ContactListItem';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {listUsers} from '../graphql/queries';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {createChatRoom, createUserChatRoom} from '../graphql/mutations';
@@ -18,6 +18,9 @@ const AddContactsScreen = () => {
   const [users, setUsers] = useState([]);
   const [name, setName] = useState('');
   const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const route = useRoute();
+
+  const chatRoom = route.params.chatRoom;
 
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -62,11 +65,24 @@ const AddContactsScreen = () => {
         <Button
           title="Invite"
           disabled={selectedUserIds.length < 1}
-          // onPress={onCreateGroupPress}
+          onPress={onCreateGroupPress}
         />
       ),
     });
   }, [selectedUserIds]);
+
+  // add user selected to chatRoom
+  const onCreateGroupPress = async () => {
+    selectedUserIds.map(userID =>
+      API.graphql(
+        graphqlOperation(createUserChatRoom, {
+          input: {chatRoomId: chatRoom.id, userId: userID},
+        }),
+      ),
+    );
+    console.log('add user succesfully');
+    navigation.goBack();
+  };
 
   const onContactPress = id => {
     setSelectedUserIds(userIds => {

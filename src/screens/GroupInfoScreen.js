@@ -56,11 +56,12 @@ const GroupInfoScreen = ({}) => {
 
   // delete user
   const removeChatRoomUser = async chatRoomUser => {
-    // await API.graphql(
-    //   graphqlOperation(deleteUserChatRoom, {
-    //     input: {_version: chatRoomUser._version, id: chatRoomUser.id},
-    //   }),
-    // );
+    await API.graphql(
+      graphqlOperation(deleteUserChatRoom, {
+        input: {_version: chatRoomUser._version, id: chatRoomUser.id},
+      }),
+    );
+    console.log('delete user succesfully');
   };
 
   const onContactPress = chatRoomUser => {

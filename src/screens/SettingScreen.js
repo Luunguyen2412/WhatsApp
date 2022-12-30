@@ -7,16 +7,19 @@ const SettingScreen = () => {
   const [name, setName] = useState(null);
   const [user, setUser] = useState();
 
-  useEffect(() => {
+  const getUserDetail = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
     API.graphql(
       graphqlOperation(getInfoUser, {
-        id: 'cc8323ad-3494-46eb-a723-d7877a737509',
+        id: authUser.attributes.sub,
       }),
     ).then(result => {
-      // setName(result.data?.getUser?.name);
-      // console.log(result);
       setUser(result.data?.getUser);
     });
+  };
+
+  useEffect(() => {
+    getUserDetail();
   }, []);
 
   // console.log(user?.name);
