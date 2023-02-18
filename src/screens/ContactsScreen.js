@@ -25,7 +25,7 @@ const ContactsScreen = ({}) => {
     API.graphql(graphqlOperation(listUsers)).then(result => {
       setUsers(result.data?.listUsers?.items);
     });
-  });
+  }, []);
 
   const createAChatRoomWithTheUser = async user => {
     //check if already have a Chatroom with user
@@ -50,7 +50,7 @@ const ContactsScreen = ({}) => {
     // add the user to the chatRoom
     await API.graphql(
       graphqlOperation(createUserChatRoom, {
-        input: {chatRoomID: newChatRoom.id, userID: user.id},
+        input: {chatRoomId: newChatRoom.id, userId: user.id},
       }),
     );
 

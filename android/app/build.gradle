@@ -145,6 +145,7 @@ android {
     }
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.whatsapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion

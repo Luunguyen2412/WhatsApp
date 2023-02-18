@@ -29,6 +29,10 @@ const ChatScreen = ({route}) => {
 
   const chatroomID = route.params.id;
 
+  const [listUser, setListUser] = useState([]);
+
+  // console.log('listUser', listUser);
+
   // fetch Chat Room
   useEffect(() => {
     API.graphql(graphqlOperation(getChatRoom, {id: chatroomID})).then(
@@ -60,6 +64,7 @@ const ChatScreen = ({route}) => {
       }),
     ).then(result => {
       setMessages(result.data?.listMessagesByChatRoom?.items);
+      setListUser(result.data?.listMessagesByChatRoom?.items?.userID);
     });
 
     // subscribe to new message

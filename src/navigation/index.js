@@ -9,6 +9,9 @@ import NewGroupScreen from '../screens/NewGroupScreen';
 import GroupInfoScreen from '../screens/GroupInfoScreen';
 import AddContactsScreen from '../screens/AddContactsToGroupScreen';
 import {createStackNavigator} from '@react-navigation/stack';
+import SearchGroupScreen from '../screens/SearchGroupScreen';
+import AddNotes from '../screens/ToDoScreen/AddNotes';
+import EditNote from '../screens/ToDoScreen/EditNote';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +25,10 @@ const Navigator = () => {
           component={MainTabNavigator}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="Search Group" component={SearchGroupScreen} />
+        <Stack.Screen name="Edit Note" component={EditNote} />
+
+        <Stack.Screen name="Add Note" component={AddNotes} />
         <Stack.Screen name="Chat" component={ChatScreen} />
         <Stack.Screen name="Group Info" component={GroupInfoScreen} />
 

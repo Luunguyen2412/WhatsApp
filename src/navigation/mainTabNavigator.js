@@ -5,9 +5,22 @@ import NotImplementedScreen from '../screens/NotImplementedScreen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import SettingScreen from '../screens/SettingScreen';
 import {View} from 'react-native';
-// import {Ionicons, Entypo} from 'react-native-vector-icons';
+import CameraScreen from '../screens/CameraScreen';
+import ImagePicker from 'react-native-image-crop-picker';
+import ToDoView from '../screens/ToDoScreen';
+import StatisticScreen from '../screens/Statistic';
 
 const Tab = createBottomTabNavigator();
+
+const openCamera = () => {
+  ImagePicker.openCamera({
+    width: 300,
+    height: 400,
+    cropping: true,
+  }).then(image => {
+    console.log(image);
+  });
+};
 
 const MainTabNavigator = () => {
   return (
@@ -19,7 +32,7 @@ const MainTabNavigator = () => {
       }}>
       <Tab.Screen
         name="Status"
-        component={NotImplementedScreen}
+        component={StatisticScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <FontAwesome size={size} name="home" color={color} />
@@ -27,17 +40,18 @@ const MainTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Calls"
-        component={NotImplementedScreen}
+        name="Notes"
+        component={ToDoView}
         options={{
           tabBarIcon: ({color, size}) => (
-            <FontAwesome size={size} name="phone" color={color} />
+            <FontAwesome size={size} name="pencil" color={color} />
           ),
         }}
       />
       <Tab.Screen
         name="Camera"
-        component={NotImplementedScreen}
+        onPress={openCamera}
+        component={CameraScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <FontAwesome size={size} name="camera" color={color} />

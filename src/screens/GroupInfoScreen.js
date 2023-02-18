@@ -54,13 +54,14 @@ const GroupInfoScreen = ({}) => {
     return () => subscription.unsubscribe();
   }, [chatroomID]);
 
-  // delete user
+  // delete user to chatRoom
   const removeChatRoomUser = async chatRoomUser => {
     await API.graphql(
       graphqlOperation(deleteUserChatRoom, {
         input: {_version: chatRoomUser._version, id: chatRoomUser.id},
       }),
     );
+    fetchChatRoom();
     console.log('delete user succesfully');
   };
 

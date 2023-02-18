@@ -23,53 +23,57 @@ import awsconfig from './src/aws-exports';
 import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
 import {LogBox} from 'react-native';
+import {Provider} from 'react-redux';
+import store from './src/screens/ToDoScreen/store';
 
 LogBox.ignoreAllLogs();
 
 Amplify.configure({...awsconfig, Analytics: {disabled: true}});
 
 const App = () => {
-  useEffect(() => {
-    const syncUser = async () => {
-      // get Auth User
-      const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
-      // console.log('authUser', authUser);
+  // useEffect(() => {
+  //   const syncUser = async () => {
+  //     // get Auth User
+  //     const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+  //     // console.log('authUser', authUser);
 
-      //query the DB using Auth user id (sub)
-      const userData = await API.graphql(
-        graphqlOperation(getUser, {id: authUser.attributes.sub}),
-      );
-      // console.log('userData', userData);
+  //     //query the DB using Auth user id (sub)
+  //     const userData = await API.graphql(
+  //       graphqlOperation(getUser, {id: authUser.attributes.sub}),
+  //     );
+  //     // console.log('userData', userData);
 
-      if (userData.data.getUser) {
-        console.log('User already exists in DB');
-        return;
-      }
+  //     if (userData.data.getUser) {
+  //       console.log('User already exists in DB');
+  //       return;
+  //     }
 
-      //if no user in DB, create one
-      const newUser = {
-        id: authUser.attributes.sub,
-        name: authUser.attributes.phone_number,
-        status: 'hey, i am using WhatsApp',
-      };
+  //     //if no user in DB, create one
+  //     const newUser = {
+  //       id: authUser.attributes.sub,
+  //       name: authUser.attributes.phone_number,
+  //       status: 'hey, i am using WhatsApp',
+  //     };
 
-      // console.log('newUser', newUser);
+  //     // console.log('newUser', newUser);
 
-      await API.graphql(graphqlOperation(createUser, {input: newUser}));
-    };
-    syncUser();
-  }, []);
+  //     await API.graphql(graphqlOperation(createUser, {input: newUser}));
+  //   };
+  //   syncUser();
+  // }, []);
 
   return (
-    <View
-      style={{
-        backgroundColor: 'whitesmoke',
-        justifyContent: 'center',
-        flex: 1,
-      }}>
-      <Navigator />
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <View
+        style={{
+          backgroundColor: 'whitesmoke',
+          justifyContent: 'center',
+          flex: 1,
+        }}>
+        <Navigator />
+        <StatusBar style="auto" />
+      </View>
+    </Provider>
   );
 };
 

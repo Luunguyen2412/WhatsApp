@@ -1,8 +1,8 @@
 export const listChatRooms =
   /* GraphQL */
   `
-    query MyQuery {
-      getUser(id: "cc8323ad-3494-46eb-a723-d7877a737509") {
+    query getUser($id: ID!) {
+      getUser(id: $id) {
         id
         ChatRooms {
           items {
